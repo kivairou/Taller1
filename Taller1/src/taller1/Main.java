@@ -19,7 +19,9 @@ public class Main {
 
 	private static void desplegarMenu() {
 		// TODO Auto-generated method stub
-		
+		System.out.println("1) Menu de Usuarios");
+		System.out.println("2) Menu de Analisis");
+		System.out.println("3) Salir");
 	}
 
 	private static void leerRegistros() throws FileNotFoundException{
@@ -42,7 +44,16 @@ public class Main {
 
 	private static void leerUsuarios() throws FileNotFoundException{
 		// TODO Auto-generated method stub
+		File txtUsuarios = new File("Usuarios.txt");
+		scan = new Scanner(txtUsuarios);
 		
+		while(scan.hasNextLine()) {
+			String linea = scan.nextLine();
+			String[] partes = linea.split(";");
+			
+			String ID = partes[0];
+			String contraseña = partes[1];
+		}
 	}
 
 }
