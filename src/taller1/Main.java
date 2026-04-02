@@ -4,8 +4,8 @@
 
 
 */
-package taller1;
 
+package taller1;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
