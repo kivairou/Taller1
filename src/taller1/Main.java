@@ -115,6 +115,7 @@ public class Main {
 			
 			opcion1 = scan.nextInt();
 			scan.nextLine();
+			
 			switch(opcion1) {
 			case 1:
 				break;
@@ -123,6 +124,27 @@ public class Main {
 			case 3:
 				break;
 			case 4:
+				String[] todosReg = new String[300];
+				int cont = 0;
+				for (int i=0;i<300;i++) {
+					String act = regActividad[i];
+					int sum = 0;
+					for (int j=0;j<i;j++) {
+						if (act!=null && act.equals(regActividad[j])) {
+							sum++;
+						}
+					}
+					if (sum == 0 && act!=null) {
+						todosReg[cont] = act;
+						cont = cont+1;
+					}
+						
+				}
+					
+				
+				for (int k=0;k<cont;k++) {
+					System.out.println("-"+todosReg[k]);
+				}
 				break;
 			case 5: System.out.println("\nSaliendo..."); break;
 			
