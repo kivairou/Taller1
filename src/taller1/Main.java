@@ -11,21 +11,25 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
-
+/**
+ * Clase principal del sistema.
+ * Permite gestionar usuarios, registrar actividades y realizar análisis de estas.
+ */
 public class Main {
 
 	private static Scanner scan;
-	
+	// Arreglos para usuarios
 	private static String[] usuarios = new String[3];
 	private static String[] contras = new String[3];
 	private static int usuariosTotales = 0;
-	
+	// Arreglos para registros de actividades
 	private static String[] regUsuario = new String[300];
 	private static String[] regFecha = new String[300];
 	private static int[] regHora = new int[300];
 	private static String[] regActividad = new String[300];
 	private static int totalRegistros = 0;
 	
+	//Carga los datos desde archivos y muestra el menú principal
 	public static void main(String[] args) throws FileNotFoundException {
 		
 		leerUsuarios();
@@ -34,7 +38,7 @@ public class Main {
 		
 
 	}
-
+	// Muestra el menú principal del sistema 
 	private static void desplegarMenu() {
 		
 		scan = new Scanner(System.in);
@@ -53,13 +57,14 @@ public class Main {
 		switch(opcion) {
 		 
 		case 1:
-			
+			 //Menú de autenticación de usuario
 			System.out.print("\nUsuario: ");
 			String user = scan.nextLine();
 			System.out.print("Contraseña: ");
 			String contra = scan.nextLine();
 			
 			int pos = -1;
+			// Validación de usuario
 			for(int i = 0; i < usuariosTotales; i++) {
 				if(usuarios[i].equals(user) && contras[i].equals(contra)) {
 					pos = i;
@@ -74,6 +79,7 @@ public class Main {
 			
 			int opcion2;
 			do {
+				// Menu de usuario
 				System.out.println("\nBienvenido "+ user);
 				System.out.println("1) Registrar actividad");
 				System.out.println("2) Modificar actividad");
@@ -107,6 +113,9 @@ public class Main {
 			
 			
 			break;
+			
+			
+		//Menú de análisis de actividades
 		case 2:
 			int opcion1 = 0;
 			do {
@@ -151,6 +160,7 @@ public class Main {
 	}
 	
 	//--------------Menu Usuarios---------------------
+	//Permite cambiar la contraseña de un usuario
 	private static void cambiarContrasena(int pos) {
 		System.out.print("Nueva Contrasena: ");
 		contras[pos] = scan.nextLine();
@@ -159,11 +169,12 @@ public class Main {
 		
 	}
 
-	
+	//Elimina una actividad registrada por el usuario
 	private static void eliminarActividad(String user) {
 		int[] indices = new int[300];
 		int contador = 0;
 		
+		// Mostrar actividades del usuario
 		for(int i = 0; i < totalRegistros; i++) {
 			if(regUsuario[i].equals(user)) {
 				System.out.println((contador + 1) + ") "+ regUsuario[i] + ";" + regFecha[i] + ";" + regHora[i] + ";" + regActividad[i]);
@@ -181,6 +192,7 @@ public class Main {
         if (sel < 1 || sel > contador) return;
         int idx = indices[sel-1];
 
+        //Desplazar elementos
         for (int i = idx; i < totalRegistros-1; i++) {
             regUsuario[i] = regUsuario[i+1];
             regFecha[i] = regFecha[i+1];
@@ -192,7 +204,7 @@ public class Main {
         System.out.println("\nActividad eliminada!!");
     }
 
-
+	//Permite modificar una actividad del usuario
 	private static void modificarActividad(String user) {
 		int[] indices = new int[300];
 		int contador = 0;
@@ -237,6 +249,7 @@ public class Main {
 		
 	}
 
+	//Registra una nueva actividad para el usuario
 	private static void registrarActividad(String user) {
 		if(totalRegistros >= 300) {
 			System.out.println("No se pueden seguir registrando actividades...");
@@ -258,6 +271,8 @@ public class Main {
 	}
 
 	//--------------Escritores de texto--------------------
+	
+	//Guarda los usuarios en un archivo de texto
 	private static void guardarUsuarios(String archivo) {
 		try (BufferedWriter escritor = new BufferedWriter(new FileWriter(archivo))) {
             for (int i = 0; i < usuariosTotales; i++) {
@@ -270,6 +285,7 @@ public class Main {
 
 		
 	}
+	//Guarda los registros de actividades en un archivo de texto
 	private static void guardarRegistros(String archivo) {
 		try (BufferedWriter escritor = new BufferedWriter(new FileWriter(archivo))){
 			for(int i = 0; i < totalRegistros; i++) {
@@ -282,6 +298,8 @@ public class Main {
 		
 	}
 	//---------------------Menu de analisis----------------------------
+	
+	// Muestra el usuario con mayor cantidad de horas registradas
 	private static void usuarioMayorProcastinacion() {
 		 int[] horasXUsuario = new int[usuariosTotales];
 		 for (int i=0;i<totalRegistros;i++) {
@@ -303,6 +321,7 @@ public class Main {
 		 System.out.println("Usuario con mayor procastinacion: "+ usuarios[indice] + " con "+ mayor + " horas");
 	}
 
+	//Muestra la actividad más realizada por cada usuario
 	private static void actividadMasRealizadaXUsuario() {
 		for (int i = 0; i<usuariosTotales;i++) {
 			String user = usuarios[i];
@@ -343,7 +362,7 @@ public class Main {
 		}
 		
 	}
-
+	//Muestra la actividad más realizada entre todos los usuarios
 	private static void actividadMasRealizada() {
 		String[] actividades = new String[300];
 		int[] contador = new int[300];
@@ -377,7 +396,8 @@ public class Main {
 		System.out.println("La actividad mas realizada es: " + actividades[indice] + " con " + mayor + " horas");
 		
 	}
-
+	
+	 //Muestra todas las actividades registradas
 	private static void verActividades() {
 		
 
@@ -396,6 +416,8 @@ public class Main {
 	
 
 	//-------------------Lectores de archivos------------------------
+	
+	// Lee los registros desde archivo
 	private static void leerRegistros() throws FileNotFoundException{
 		
 		try {
@@ -420,6 +442,7 @@ public class Main {
 		
 	}
 
+	//Lee los usuarios desde archivo
 	private static void leerUsuarios() throws FileNotFoundException{
 		
 		try {
