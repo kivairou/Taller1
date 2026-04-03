@@ -16,7 +16,7 @@ El programa ofrece dos menús principales:
 
 ## Integrantes
 - Kevin Zamora Riquelme – RUT: 21.578.521-1 – Usuario GitHub: kivairou 
-- Tomás Zepeda Velasquez - RUT: 21.789.061-6 - tomaszepeda2411
+- Tomás Zepeda Velasquez - RUT: 21.789.061-6 - Usuario GitHub: tomaszepeda2411
 
 ---
 
