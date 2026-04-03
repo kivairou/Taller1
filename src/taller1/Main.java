@@ -298,27 +298,21 @@ public class Main {
 	}
 
 	private static void verActividades() {
-		String[] todosReg = new String[300];
-		int cont = 0;
-		for (int i=0;i<300;i++) {
-			String act = regActividad[i];
-			int sum = 0;
-			for (int j=0;j<i;j++) {
-				if (act!=null && act.equals(regActividad[j])) {
-					sum++;
+		
+
+			for (int j=0;j<300;j++) {
+				if (regActividad[j] != null) {
+					System.out.println(regActividad[j]);
+					}
 				}
 			}
-			if (sum == 0 && act!=null) {
-				todosReg[cont] = act;
-				cont = cont+1;
-			}
+			
+			
 				
-		}
-		for (int k=0;k<cont;k++) {
-			System.out.println("- "+todosReg[k]);
-		}
 		
-	}
+		
+		
+	
 
 	//-------------------Lectores de archivos------------------------
 	private static void leerRegistros() throws FileNotFoundException{
