@@ -51,7 +51,7 @@ public class Main {
 		scan.nextLine();
 		
 		switch(opcion) {
-		
+		 
 		case 1:
 			
 			System.out.print("\nUsuario: ");
@@ -150,6 +150,7 @@ public class Main {
 		
 	}
 	
+	//--------------Menu Usuarios---------------------
 	private static void cambiarContrasena(int pos) {
 		System.out.print("Nueva Contrasena: ");
 		contras[pos] = scan.nextLine();
@@ -158,19 +159,7 @@ public class Main {
 		
 	}
 
-	private static void guardarUsuarios(String archivo) {
-		try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo))) {
-            for (int i = 0; i < usuariosTotales; i++) {
-                bw.write(usuarios[i] + ";" + contras[i]);
-                bw.newLine();
-            }
-        } catch (Exception e) {
-            System.out.println("Error guardando usuario: " + e.getMessage());
-        }
-
-		
-	}
-
+	
 	private static void eliminarActividad(String user) {
 		int[] indices = new int[300];
 		int contador = 0;
@@ -268,6 +257,19 @@ public class Main {
 		
 	}
 
+	//--------------Escritores de texto--------------------
+	private static void guardarUsuarios(String archivo) {
+		try (BufferedWriter escritor = new BufferedWriter(new FileWriter(archivo))) {
+            for (int i = 0; i < usuariosTotales; i++) {
+                escritor.write(usuarios[i] + ";" + contras[i]);
+                escritor.newLine();
+            }
+        } catch (Exception e) {
+            System.out.println("Error guardando usuario: " + e.getMessage());
+        }
+
+		
+	}
 	private static void guardarRegistros(String archivo) {
 		try (BufferedWriter escritor = new BufferedWriter(new FileWriter(archivo))){
 			for(int i = 0; i < totalRegistros; i++) {
@@ -279,7 +281,7 @@ public class Main {
 		}
 		
 	}
-
+	//---------------------Menu de analisis----------------------------
 	private static void usuarioMayorProcastinacion() {
 		// TODO Auto-generated method stub
 		
@@ -318,6 +320,7 @@ public class Main {
 		
 	}
 
+	//-------------------Lectores de archivos------------------------
 	private static void leerRegistros() throws FileNotFoundException{
 		
 		try {
