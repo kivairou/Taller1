@@ -16,8 +16,8 @@ public class Main {
 
 	private static Scanner scan;
 	
-	private static String[] usuarios = new String[100];
-	private static String[] contras = new String[100];
+	private static String[] usuarios = new String[3];
+	private static String[] contras = new String[3];
 	private static int usuariosTotales = 0;
 	
 	private static String[] regUsuario = new String[300];
@@ -283,17 +283,98 @@ public class Main {
 	}
 	//---------------------Menu de analisis----------------------------
 	private static void usuarioMayorProcastinacion() {
-		// TODO Auto-generated method stub
-		
+		 int[] horasXUsuario = new int[usuariosTotales];
+		 for (int i=0;i<totalRegistros;i++) {
+			 for(int j=0;j<usuariosTotales;j++) {
+				 if (regUsuario[i].equals(usuarios[j])) {
+					 horasXUsuario[j] += regHora[i];
+				 }
+			 }
+		 }
+		 int mayor = 0;
+		 int indice = 0;
+		 for (int i = 0;i<usuariosTotales;i++) {
+			 if (horasXUsuario[i] > mayor ) {
+				 mayor = horasXUsuario[i];
+				 indice = i;
+				 
+			 }
+		 }
+		 System.out.println("Usuario con mayor procastinacion: "+ usuarios[indice] + " con "+ mayor + " horas");
 	}
 
 	private static void actividadMasRealizadaXUsuario() {
-		// TODO Auto-generated method stub
+		for (int i = 0; i<usuariosTotales;i++) {
+			String user = usuarios[i];
+			String[] actividades = new String[300];
+			int[] contador = new int[300];
+			int totalAct = 0;
+			
+			for (int j = 0; j<totalRegistros;j++) {
+				if (regUsuario[j].equals(user)) {
+					String actividad = regActividad[j];
+					int pos = -1;
+					
+					for (int k = 0;k<totalAct;k++) {
+						if (actividades[k].equals(actividad)) {
+							pos = k;
+							break;
+						}
+					}
+					if (pos == -1) {
+						actividades[totalAct] = actividad;
+						contador[totalAct] = regHora[j];
+						totalAct++;
+					}else {
+						contador[pos] += regHora[j];
+					}
+				}
+			}
+			if (totalAct > 0);
+			int mayor = 0;
+			int indice = 0;
+			for (int j = 0; j<totalAct;j++) {
+				if (contador[j] > mayor) {
+					mayor = contador[j];
+					indice = j;
+				}
+			}
+			System.out.println("- "+ user +" " + actividades[indice] + " con " + mayor + " horas registadas");
+		}
 		
 	}
 
 	private static void actividadMasRealizada() {
-		// TODO Auto-generated method stub
+		String[] actividades = new String[300];
+		int[] contador = new int[300];
+		int totalActividades = 0;
+		for (int i = 0; i<totalRegistros;i++) {
+			String actividad = regActividad[i];
+			int pos = -1;
+			for (int j = 0; j<totalActividades;j++) {
+				if (actividades[j].equals(actividad)){
+					pos = j;
+					break;
+				}
+			}
+			if (pos == -1) {
+				actividades[totalActividades] = actividad;
+				contador[totalActividades] = regHora[i];
+				totalActividades++;
+ 			}else {
+ 				contador[pos] += regHora[i];
+ 			}
+				
+		}
+		int mayor = 0;
+		int indice = 0;
+		for (int i = 0; i<totalActividades;i++) {
+			if (contador[i] > mayor) {
+				mayor = contador[i];
+				indice = i;
+			}
+		}
+		System.out.println("La actividad mas realizada es: " + actividades[indice] + " con " + mayor + " horas");
 		
 	}
 
@@ -302,7 +383,7 @@ public class Main {
 
 			for (int j=0;j<300;j++) {
 				if (regActividad[j] != null) {
-					System.out.println(regActividad[j]);
+					System.out.println(regUsuario[j]+" | "+regFecha[j]+" | "+regHora[j]+" | "+regActividad[j]);
 					}
 				}
 			}
