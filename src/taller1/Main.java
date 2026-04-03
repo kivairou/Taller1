@@ -7,8 +7,10 @@
 
 package taller1;
 import java.util.Scanner;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 
 public class Main {
 
@@ -85,12 +87,16 @@ public class Main {
 						
 				switch(opcion2) {
 				case 1:
+					registrarActividad(user);
 					break;
 				case 2:
+					modificarActividad(user);
 					break;
 				case 3:
+					eliminarActividad(user);
 					break;
 				case 4:
+					cambiarContrasena(pos);
 					break;
 				case 5: System.out.println("\nSaliendo..."); break;
 				
@@ -118,33 +124,16 @@ public class Main {
 			
 			switch(opcion1) {
 			case 1:
+				actividadMasRealizada();
 				break;
 			case 2:
+				actividadMasRealizadaXUsuario();
 				break;
 			case 3:
+				usuarioMayorProcastinacion();
 				break;
 			case 4:
-				String[] todosReg = new String[300];
-				int cont = 0;
-				for (int i=0;i<300;i++) {
-					String act = regActividad[i];
-					int sum = 0;
-					for (int j=0;j<i;j++) {
-						if (act!=null && act.equals(regActividad[j])) {
-							sum++;
-						}
-					}
-					if (sum == 0 && act!=null) {
-						todosReg[cont] = act;
-						cont = cont+1;
-					}
-						
-				}
-					
-				
-				for (int k=0;k<cont;k++) {
-					System.out.println("-"+todosReg[k]);
-				}
+				verActividades();
 				break;
 			case 5: System.out.println("\nSaliendo..."); break;
 			
@@ -161,6 +150,174 @@ public class Main {
 		
 	}
 	
+	private static void cambiarContrasena(int pos) {
+		System.out.print("Nueva Contrasena: ");
+		contras[pos] = scan.nextLine();
+		guardarUsuarios("Usuarios.txt");
+		System.out.println("\nContrasena cambiada correctamente!!");
+		
+	}
+
+	private static void guardarUsuarios(String archivo) {
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo))) {
+            for (int i = 0; i < usuariosTotales; i++) {
+                bw.write(usuarios[i] + ";" + contras[i]);
+                bw.newLine();
+            }
+        } catch (Exception e) {
+            System.out.println("Error guardando usuario: " + e.getMessage());
+        }
+
+		
+	}
+
+	private static void eliminarActividad(String user) {
+		int[] indices = new int[300];
+		int contador = 0;
+		
+		for(int i = 0; i < totalRegistros; i++) {
+			if(regUsuario[i].equals(user)) {
+				System.out.println((contador + 1) + ") "+ regUsuario[i] + ";" + regFecha[i] + ";" + regHora[i] + ";" + regActividad[i]);
+				indices[contador] = i;
+				contador++;
+			}
+		}
+		if (contador == 0) {
+			System.out.println("El usuario no tiene actividades...");
+			return;
+		}
+		System.out.print("Seleccione actividad: ");
+		int sel = scan.nextInt();
+		scan.nextLine();
+        if (sel < 1 || sel > contador) return;
+        int idx = indices[sel-1];
+
+        for (int i = idx; i < totalRegistros-1; i++) {
+            regUsuario[i] = regUsuario[i+1];
+            regFecha[i] = regFecha[i+1];
+            regHora[i] = regHora[i+1];
+            regActividad[i] = regActividad[i+1];
+        }
+        totalRegistros--;
+        guardarRegistros("Registros.txt");
+        System.out.println("\nActividad eliminada!!");
+    }
+
+
+	private static void modificarActividad(String user) {
+		int[] indices = new int[300];
+		int contador = 0;
+		for(int i = 0; i < totalRegistros; i++) {
+			if(regUsuario[i].equals(user)) {
+				System.out.println((contador+1)+ ") " + regUsuario[i] + ";" + regFecha[i] + ";" + regHora[i] + ";" + regActividad[i]);
+				indices[contador] = i;
+				contador++;	
+			}
+		}
+		if(contador == 0) {
+			System.out.println("El usuarios no tiene actividades...");
+			return;
+		}
+		 System.out.print("Seleccione actividad: ");
+	        int sel = scan.nextInt();
+	        scan.nextLine();
+	        if (sel < 1 || sel > contador) return;
+	        int idx = indices[sel-1];
+
+	        System.out.println("1) Fecha\n2) Duracion\n3) Actividad");
+	        System.out.print("Ingrese campo a modificar: ");
+	        int campo = scan.nextInt(); scan.nextLine();
+	        switch(campo) {
+	            case 1: 
+	            	System.out.print("Nueva fecha: ");
+	            	regFecha[idx] = scan.nextLine();
+	            	break;
+	            case 2:
+	            	System.out.print("Nueva duracion: ");
+	            	regHora[idx] = scan.nextInt();
+	            	scan.nextLine();
+	            	break;
+	            case 3:
+	            	System.out.print("Nueva actividad: ");
+	            	regActividad[idx] = scan.nextLine();
+	            	break;
+	        }
+	        guardarRegistros("Registros.txt");
+	        System.out.println("\nActividad modificada!!");
+
+		
+	}
+
+	private static void registrarActividad(String user) {
+		if(totalRegistros >= 300) {
+			System.out.println("No se pueden seguir registrando actividades...");
+			return;
+		}
+		System.out.print("Fecha (dd/mm/aaaa): ");
+		regFecha[totalRegistros] = scan.nextLine();
+		System.out.print("Hora: ");
+		regHora[totalRegistros] = scan.nextInt();
+		scan.nextLine();
+		System.out.println("Actividad: ");
+		regActividad[totalRegistros] = scan.nextLine();
+		regUsuario[totalRegistros] = user;
+		totalRegistros++;
+		guardarRegistros("Registros.txt");
+		System.out.println("\nActividad registrada!!");
+		
+		
+	}
+
+	private static void guardarRegistros(String archivo) {
+		try (BufferedWriter escritor = new BufferedWriter(new FileWriter(archivo))){
+			for(int i = 0; i < totalRegistros; i++) {
+				escritor.write(regUsuario[i] + ";" + regFecha[i] + ";" + regHora[i] + ";" + regActividad[i]);
+				escritor.newLine();
+			}
+		} catch (Exception e) {
+			System.out.println("Error guardando registro: "+ e.getMessage());
+		}
+		
+	}
+
+	private static void usuarioMayorProcastinacion() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private static void actividadMasRealizadaXUsuario() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private static void actividadMasRealizada() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private static void verActividades() {
+		String[] todosReg = new String[300];
+		int cont = 0;
+		for (int i=0;i<300;i++) {
+			String act = regActividad[i];
+			int sum = 0;
+			for (int j=0;j<i;j++) {
+				if (act!=null && act.equals(regActividad[j])) {
+					sum++;
+				}
+			}
+			if (sum == 0 && act!=null) {
+				todosReg[cont] = act;
+				cont = cont+1;
+			}
+				
+		}
+		for (int k=0;k<cont;k++) {
+			System.out.println("- "+todosReg[k]);
+		}
+		
+	}
+
 	private static void leerRegistros() throws FileNotFoundException{
 		
 		try {
